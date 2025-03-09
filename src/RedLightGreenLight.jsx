@@ -24,7 +24,7 @@ const disableCopyPaste = EditorView.domEventHandlers({
 const squidGameMusic = "/public/images/squid game music.mpeg";
 
 // Admin-provided start time and game duration (in seconds)
-const adminStartTime = new Date("2025-03-09T19:16:00"); // Replace with admin-provided timestamp
+const adminStartTime = new Date("2025-03-09T23:59:00"); // Replace with admin-provided timestamp
 const gameDuration = 600; // Game duration in seconds
 const targetTime = new Date(adminStartTime.getTime() + gameDuration * 1000);
 

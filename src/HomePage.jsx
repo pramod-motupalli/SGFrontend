@@ -8,71 +8,22 @@ const HomePage = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
-  // Fetch the player ID from the API endpoint
-
+  // Retrieve the player ID from localStorage instead of calling the backend
   useEffect(() => {
-    const fetchPlayerId = async () => {
-      const username = localStorage.getItem("username");
-      if (!username) {
-        setError("Username not found in localStorage");
-        setLoading(false);
-        return;
-      }
-
-      console.log(username);
-
-      try {
-        // Send a POST request with the username in the request body
-        const response = await fetch(`https://squidgamebackend.onrender.com/api/player`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ username }),
-        });
-
-        if (!response.ok) {
-          const text = await response.text();
-          throw new Error("Network response was not ok: " + text);
-        }
-
-        const contentType = response.headers.get("content-type");
-        let data;
-        if (contentType && contentType.includes("application/json")) {
-          data = await response.json();
-        } else {
-          // If content type is not JSON, attempt to parse the raw text
-          const rawText = await response.text();
-          try {
-            data = JSON.parse(rawText);
-          } catch (parseError) {
-            throw new Error(
-              "Failed to parse JSON from response: " + parseError.message
-            );
-          }
-        }
-        if (data && data.playerId) {
-          setPlayerId(data.playerId);
-          localStorage.setItem("playerid", data.playerId); 
-        } else {
-          throw new Error("Invalid data format received");
-        }
-      } catch (err) {
-        console.error("Error fetching player ID:", err);
-        setError(err.message);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchPlayerId();
+    const storedPlayerId = localStorage.getItem("playerid");
+    if (!storedPlayerId) {
+      setError("Player ID not found in localStorage");
+    } else {
+      setPlayerId(storedPlayerId);
+    }
+    setLoading(false);
   }, []);
 
   return (
     <div className="home-container flex flex-col items-center justify-center p-4 bg-black w-full min-h-screen text-white relative">
       {/* Player ID Display (Top-Left Corner) */}
       <div className="absolute top-4 left-4 text-white font-bold px-3 py-1 rounded-md text-sm sm:text-lg shadow-md">
-         {playerId || "N/A"}
+        Welcome, {playerId || "N/A"}
       </div>
 
       {/* Main Content Box */}

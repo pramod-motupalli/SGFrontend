@@ -5,23 +5,19 @@ const Level2Instructions = () => {
   const navigate = useNavigate();
   const [timeLeft, setTimeLeft] = useState(3); // Timer in seconds
 
-  // Replace backend API call with a localStorage check.
-  const checkLevel1Status = () => {
-    const level1Status = localStorage.getItem("level1");
-    if (level1Status === "true") {
-      console.log("Level 1 completed (localStorage):", level1Status);
-      navigate("/TugOfWar"); // Navigate to Level 2 page
-    } else {
-      console.error("Level 1 not completed according to localStorage");
-      navigate("/TugOfWar");
-    }
-  };
-
   // Format time as MM:SS
   const formatTime = (seconds) => {
     const minutes = Math.floor(seconds / 60);
     const secs = seconds % 60;
     return `${minutes}:${secs < 10 ? "0" : ""}${secs}`;
+  };
+
+  // Check Level 1 completion status in localStorage
+  const checkLevel1Status = () => {
+    const level1Completed = localStorage.getItem("level1Completed");
+    if (level1Completed === "true") {
+      navigate("/TugOfWar"); // Navigate to Level 2 page
+    }
   };
 
   useEffect(() => {
@@ -30,6 +26,7 @@ const Level2Instructions = () => {
         if (prev <= 1) {
           clearInterval(timer);
           checkLevel1Status(); // Use localStorage check when timer ends
+          navigate("/TugOfWar"); // Ensure navigation on 00
           return 0;
         }
         return prev - 1;
