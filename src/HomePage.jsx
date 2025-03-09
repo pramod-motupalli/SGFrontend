@@ -8,13 +8,18 @@ const HomePage = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
-  // Retrieve the player ID from localStorage instead of calling the backend
+  // Retrieve the logged-in user's player ID from localStorage
   useEffect(() => {
-    const storedPlayerId = localStorage.getItem("playerid");
-    if (!storedPlayerId) {
-      setError("Player ID not found in localStorage");
+    const storedUser = localStorage.getItem("loggedInUser");
+    if (!storedUser) {
+      setError("Logged in user not found in localStorage");
     } else {
-      setPlayerId(storedPlayerId);
+      try {
+        const user = JSON.parse(storedUser);
+        setPlayerId(user.playerid);
+      } catch (err) {
+        setError("Error parsing user data");
+      }
     }
     setLoading(false);
   }, []);
