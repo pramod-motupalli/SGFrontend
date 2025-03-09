@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Square, Circle, Triangle } from "lucide-react";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
@@ -10,81 +10,75 @@ const LoginPage = () => {
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-  const handleSubmit = async (e) => {
+
+  // Array of users
+  const usersData = [
+    {
+      username: "bhavani@gmail.com",
+      password: "Bhavani",
+      playerid: "player572",
+      level1: true,
+      level2: false,
+      eliminated: false,
+    },
+    {
+      username: "pramod@gmail.com",
+      password: "Pramod",
+      playerid: "player531",
+      level1: true,
+      level2: false,
+      eliminated: false,
+    },
+    {
+      username: "snehitha@gmail.com",
+      password: "Snehitha",
+      playerid: "player526",
+      level1: true,
+      level2: false,
+      eliminated: false,
+    },
+  ];
+  
+  // Save the users array to localStorage if not already present
+  useEffect(() => {
+    if (!localStorage.getItem("users")) {
+      localStorage.setItem("users", JSON.stringify(usersData));
+    }
+  }, [usersData]);
+
+  // Handle login
+  const handleSubmit = (e) => {
     e.preventDefault();
     setLoading(true);
     setMessage("");
 
-    try {
-      const response = await fetch("http://localhost:5000/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username, password }),
-      });
+    // Retrieve stored users array from localStorage
+    const storedUsers = JSON.parse(localStorage.getItem("users")) || [];
+    const inputUsername = username.trim();
+    const inputPassword = password.trim();
 
-      const data = await response.json();
-      console.log(data);
-      const handleLogin = async (username, password) => {
-        try {
-          const response = await fetch("http://localhost:5000/login", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ username, password }),
-          });
+    // Check if any user matches the entered credentials
+    const foundUser = storedUsers.find(
+      (user) =>
+        user.username === inputUsername && user.password === inputPassword
+    );
 
-          const data = await response.json();
-
-          if (data) {
-            localStorage.setItem("username", username); // Store username in localStorage
-            console.log("Login successful:", data);
-            
-          } else {
-            console.error("Login failed:", data.message);
-          }
-        } catch (error) {
-          console.error("Request failed:", error);
-        }
-      };
-
-      if (data) {
-        setMessage(`✅ Welcome, ${data.user.username}!`);
-        localStorage.setItem("username", data.user.username);
-        console.log(data.user.level2);
-        handleLogin(username, password);
-        if (data.user.eliminated) {
-          navigate("/TugOfWarDisqualified");
-        } else {
-          if (data.user.level2) {
-            navigate("/TugOfWar");
-          } else {
-            if (data.user.level1) {
-              navigate("/level1/game");
-            }
-            else{
-              navigate("/HomePage");
-            }
-          }
-        }
-       
-        // onLogin(data.user); // Pass user data to parent component if needed
-      } else {
-        setMessage(`❌ ${data.message}`);
-      }
-    } catch (error) {
-      setMessage("❌ Login failed. Please try again.");
-    } finally {
-      setLoading(false);
+    if (foundUser) {
+      // Save login info to localStorage
+      localStorage.setItem("loggedInUser", JSON.stringify(foundUser));
+      localStorage.setItem("username", inputUsername);
+      setMessage(`✅ Welcome, ${inputUsername}!`);
+      setTimeout(() => navigate("/HomePage"), 1000);
+    } else {
+      setMessage("❌ Invalid credentials. Please try again.");
     }
+    setLoading(false);
   };
 
   return (
     <div
       className="flex justify-center items-center min-h-screen w-full bg-cover bg-center bg-no-repeat px-4 sm:px-6 lg:px-8 overflow-hidden"
-      style={{
-        backgroundImage: "url('/images/squid game landscape(pramod).png')",
-      }}
+      style={{ backgroundImage: "url('/images/squid game landscape(pramod).png')" }}
     >
       <div className="absolute inset-0 bg-black opacity-10 z-0"></div>
 
@@ -117,9 +111,7 @@ const LoginPage = () => {
             />
           </div>
           <div className="mb-4 text-left">
-            <label className="block mb-1 text-emerald-50 text-3xl">
-              Password
-            </label>
+            <label className="block mb-1 text-emerald-50 text-3xl">Password</label>
             <input
               type="password"
               placeholder="Enter password"

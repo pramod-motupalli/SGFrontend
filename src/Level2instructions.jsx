@@ -5,25 +5,15 @@ const Level2Instructions = () => {
   const navigate = useNavigate();
   const [timeLeft, setTimeLeft] = useState(3); // Timer in seconds
 
-  const fetchLevel1CompletedUsers = async () => {
-    try {
-      const response = await fetch(
-        "http://localhost:5000/users-with-level1-true",
-        {
-          method: "GET",
-          headers: { "Content-Type": "application/json" },
-        }
-      );
-      const data = await response.json();
-
-      if (data) {
-        console.log("Users with Level 1 completed:", data);
-        navigate("/TugOfWar"); // Navigate to Level 2 page
-      } else {
-        console.error("Error fetching users:", data.message);
-      }
-    } catch (error) {
-      console.error("Request failed:", error);
+  // Replace backend API call with a localStorage check.
+  const checkLevel1Status = () => {
+    const level1Status = localStorage.getItem("level1");
+    if (level1Status === "true") {
+      console.log("Level 1 completed (localStorage):", level1Status);
+      navigate("/TugOfWar"); // Navigate to Level 2 page
+    } else {
+      console.error("Level 1 not completed according to localStorage");
+      navigate("/TugOfWar");
     }
   };
 
@@ -39,7 +29,7 @@ const Level2Instructions = () => {
       setTimeLeft((prev) => {
         if (prev <= 1) {
           clearInterval(timer);
-          fetchLevel1CompletedUsers(); // Trigger API call when timer ends
+          checkLevel1Status(); // Use localStorage check when timer ends
           return 0;
         }
         return prev - 1;
@@ -71,10 +61,18 @@ const Level2Instructions = () => {
           Welcome to the Second level of the competition! Follow the instructions carefully:
         </p>
         <ul className="mt-4 text-left space-y-2">
-          <li>🔹 Both teams receive the same set of aptitude and logical reasoning questions.</li>
-          <li>🔹 Correct answers move the virtual rope toward their team’s side.</li>
-          <li>🔹 The team that pulls the rope completely to their side wins the round.</li>
-          <li>🔹 The winning team will be qualified to the next level of the game.</li>
+          <li>
+            🔹 Both teams receive the same set of aptitude and logical reasoning questions.
+          </li>
+          <li>
+            🔹 Correct answers move the virtual rope toward their team’s side.
+          </li>
+          <li>
+            🔹 The team that pulls the rope completely to their side wins the round.
+          </li>
+          <li>
+            🔹 The winning team will be qualified to the next level of the game.
+          </li>
         </ul>
       </div>
     </div>

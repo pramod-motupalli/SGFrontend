@@ -23,7 +23,7 @@ const HomePage = () => {
 
       try {
         // Send a POST request with the username in the request body
-        const response = await fetch(`http://localhost:5000/api/player`, {
+        const response = await fetch(`https://squidgamebackend.onrender.com/api/player`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -72,7 +72,7 @@ const HomePage = () => {
     <div className="home-container flex flex-col items-center justify-center p-4 bg-black w-full min-h-screen text-white relative">
       {/* Player ID Display (Top-Left Corner) */}
       <div className="absolute top-4 left-4 text-white font-bold px-3 py-1 rounded-md text-sm sm:text-lg shadow-md">
-        Welcome, {playerId || "N/A"}
+         {playerId || "N/A"}
       </div>
 
       {/* Main Content Box */}

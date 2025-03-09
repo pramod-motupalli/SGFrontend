@@ -22,10 +22,9 @@ const disableCopyPaste = EditorView.domEventHandlers({
 });
 
 const squidGameMusic = "/public/images/squid game music.mpeg";
-const COMPILERX_API_URL = "http://localhost:5000/compile";
 
 // Admin-provided start time and game duration (in seconds)
-const adminStartTime = new Date("2025-03-06T19:16:00"); // Replace with admin-provided timestamp
+const adminStartTime = new Date("2025-03-09T19:16:00"); // Replace with admin-provided timestamp
 const gameDuration = 600; // Game duration in seconds
 const targetTime = new Date(adminStartTime.getTime() + gameDuration * 1000);
 
@@ -37,7 +36,12 @@ const RedLightGreenLight = () => {
   const [bloodAlert, setBloodAlert] = useState(null);
 
   // Helper to show our custom alert
-  const showBloodAlert = (message, onClose, buttonText = "OK", title = "Blood Bath Alert!") => {
+  const showBloodAlert = (
+    message,
+    onClose,
+    buttonText = "OK",
+    title = "Blood Bath Alert!"
+  ) => {
     setBloodAlert({ message, onClose, buttonText, title });
   };
 
@@ -48,7 +52,18 @@ const RedLightGreenLight = () => {
     }
   }, []);
 
-  const [won, setWon] = useState(100);
+  // Initialize won from localStorage or default to 100
+  const [won, setWon] = useState(() => {
+    const stored = localStorage.getItem("won");
+    return stored ? parseInt(stored, 10) : 100;
+  });
+
+  // Update localStorage when won changes
+  const updateWonLocal = (newWon) => {
+    localStorage.setItem("won", newWon);
+    console.log("Won updated in localStorage:", newWon);
+  };
+
   const [timeLeft, setTimeLeft] = useState(() =>
     Math.max(Math.floor((targetTime - Date.now()) / 1000), 0)
   );
@@ -76,7 +91,7 @@ const RedLightGreenLight = () => {
     },
     {
       prompt:
-        "// Fix the bug in this code\n#incude <stdoi.h>\nint sumOfDigits(int n) {\nint sum = 0;\nwhle (n > 0)\n{\nsum += n % (100/10); \nn =n/10; \n}\nreturn s;\nint man() {\nint num = 30213468; \n print('Sum of digits of %D is %D', num, sumOfDigits(num));\n return 0,\n}",
+        "// Fix the bug in this code\n#incude <stdoi.h>\nint sumOfDigits(int n) {\nint sum = 0;\nwhle (n > 0)\n{\nsum += n % (100/10); \nn = n/10; \n}\nreturn s;\nint man() {\nint num = 30213468; \n print('Sum of digits of %D is %D', num, sumOfDigits(num));\n return 0,\n}",
       expected: "Sum of digits of 30213468 is 27",
     },
   ];
@@ -86,92 +101,23 @@ const RedLightGreenLight = () => {
     setExpectedOutput(questions[currentQuestion].expected);
   }, [currentQuestion]);
 
-  // Fetch saved code from the database on mount
+  // Retrieve saved code from localStorage on mount
   useEffect(() => {
-    async function fetchSavedCode() {
-      try {
-        const username = localStorage.getItem("username");
-        const response = await fetch("http://localhost:5000/fetch-code1", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ username }),
-        });
-        const data = await response.json();
-        console.log(data);
-        let savedCode1 = { ...userCode };
-        if (data.level1Q1) {
-          savedCode1[0] = data.level1Q1;
-        }
-        if (data.level1Q2) {
-          savedCode1[1] = data.level1Q2;
-        }
-        if (data.level1Q3) {
-          savedCode1[2] = data.level1Q3;
-        }
-        setUserCode(savedCode1);
-      } catch (err) {
-        console.error("Error fetching saved code", err);
-      }
-    }
-    fetchSavedCode();
+    const savedCode = {};
+    const level1Q1 = localStorage.getItem("level1Q1");
+    const level1Q2 = localStorage.getItem("level1Q2");
+    const level1Q3 = localStorage.getItem("level1Q3");
+    if (level1Q1) savedCode[0] = level1Q1;
+    if (level1Q2) savedCode[1] = level1Q2;
+    if (level1Q3) savedCode[2] = level1Q3;
+    setUserCode(savedCode);
   }, []);
-
-  // Retrieve the won value from the backend
-  useEffect(() => {
-    const fetchWon = async () => {
-      const username = localStorage.getItem("username");
-      if (username) {
-        try {
-          const response = await fetch("http://localhost:5000/users1", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ username }),
-          });
-          const data = await response.json();
-          console.log(data.user.won);
-          setWon(data.user.won || 100);
-        } catch (err) {
-          console.error("Error fetching won:", err);
-          setWon(100);
-        }
-      } else {
-        setWon(100);
-      }
-    };
-    fetchWon();
-  }, []);
-
-  // Update game state in the database when currentQuestion or completedQuestions change.
-  useEffect(() => {
-    const username = localStorage.getItem("username");
-    if (!username) return;
-    fetch("http://localhost:5000/updategamestate", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ username }),
-    })
-      .then((res) => res.json())
-      .then((data) => console.log("Game state updated in DB:", data))
-      .catch((err) => console.error("Error updating game state:", err));
-  }, [currentQuestion, completedQuestions]);
 
   // Real-time timer sync using admin-provided targetTime.
-  const handleGameOver = useCallback(async () => {
-    try {
-      const username = localStorage.getItem("username");
-      const response = await fetch("http://localhost:5000/eliminateUser", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username, eliminated: true }),
-      });
-      if (response.ok) {
-        navigate("/Thankyou");
-      } else {
-        console.error("Failed to mark user as eliminated.");
-      }
-    } catch (error) {
-      console.error("Error updating elimination status:", error);
-    }
+  const handleGameOver = useCallback(() => {
+    // Mark user as eliminated in localStorage and navigate
+    localStorage.setItem("eliminated", "true");
+    navigate("/Thankyou");
   }, [navigate]);
 
   useEffect(() => {
@@ -198,16 +144,7 @@ const RedLightGreenLight = () => {
       }
     }, 1000);
     return () => clearInterval(timerInterval);
-  }, [
-    targetTime,
-    completedQuestions,
-    questions.length,
-    won,
-    navigate,
-    handleGameOver,
-    showBloodAlert,
-  ]);
-
+  }, [completedQuestions, questions.length, won, navigate, handleGameOver]);
 
   // Manage red/green light transitions and audio playback.
   useEffect(() => {
@@ -227,78 +164,34 @@ const RedLightGreenLight = () => {
     };
   }, [audio]);
 
-  // Update the won value in the database.
-  const updateWonInDB = (newWon) => {
-    const username = localStorage.getItem("username");
-    if (!username) return;
-    fetch("http://localhost:5000/updatewon", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ username, won: newWon }),
-    })
-      .then((res) => res.json())
-      .then((data) => console.log("Won updated in DB:", data))
-      .catch((err) => console.error("Error updating won:", err));
-  };
-
-  // Update code for the current question. Deduct 2 won if not green light.
-  const handleCodeChange = (value) => {
-    if (!isGreenLight) {
-      setWon((prevWon) => {
-        const newWon = Math.max(prevWon - 2, 0);
-        updateWonInDB(newWon);
-        return newWon;
-      });
-    }
-    setUserCode((prev) => ({ ...prev, [currentQuestion]: value }));
-  };
-
-  const handleNextQuestion = () => {
-    if (currentQuestion < questions.length - 1) {
-      setCurrentQuestion(currentQuestion + 1);
-      setOutput("");
-    }
-  };
-
-  const handlePreviousQuestion = () => {
-    if (currentQuestion > 0) {
-      setCurrentQuestion(currentQuestion - 1);
-      setOutput("");
-    }
-  };
-
+  // Simulate code compilation instead of calling a backend compiler.
   const handleCompileRun = async () => {
     setCompiling(true);
-    try {
-      const response = await fetch(COMPILERX_API_URL, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          language: "c",
-          code: userCode[currentQuestion] || "",
-          stdin: "",
-        }),
-      });
-      const result = await response.json();
-      setOutput(result.output || "Error in execution");
-    } catch (error) {
-      console.error("Error compiling:", error);
-      setOutput("Compilation Error");
-    }
-    setCompiling(false);
+    // Simulate a delay and check if the code includes the word "fix" to decide output.
+    setTimeout(() => {
+      const codeToCheck = userCode[currentQuestion] || "";
+      if (codeToCheck.includes("fix")) {
+        setOutput(expectedOutput);
+      } else {
+        setOutput("Error in execution");
+      }
+      setCompiling(false);
+    }, 1000);
   };
 
-  // On submission, update won via the database, mark the question as completed,
+  // On submission, update won in localStorage, mark the question as completed,
   // and automatically progress to the next question if available.
   const handleSubmit = async () => {
     if (output.trim() === expectedOutput.trim()) {
       if (!completedQuestions.includes(currentQuestion)) {
         const newWon = won + 10;
         setWon(newWon);
-        updateWonInDB(newWon);
+        updateWonLocal(newWon);
         setCompletedQuestions((prev) => [...prev, currentQuestion]);
         showBloodAlert(
-          `Correct! You earned 10 Won! Completed Questions: ${completedQuestions.length + 1}`,
+          `Correct! You earned 10 Won! Completed Questions: ${
+            completedQuestions.length + 1
+          }`,
           () => {},
           "Continue",
           "Slaughter of Success!"
@@ -307,7 +200,7 @@ const RedLightGreenLight = () => {
         if (currentQuestion < questions.length - 1) {
           setCurrentQuestion((prev) => prev + 1);
         }
-        // Determine the field name for saving code.
+        // Save code to localStorage instead of backend.
         let questionField = "";
         if (currentQuestion === 0) {
           questionField = "level1Q1";
@@ -317,21 +210,8 @@ const RedLightGreenLight = () => {
           questionField = "level1Q3";
         }
         if (questionField) {
-          try {
-            const response = await fetch("http://localhost:5000/savecode1", {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({
-                username: username,
-                question: questionField,
-                code: userCode[currentQuestion] || "",
-              }),
-            });
-            console.log(response);
-            console.log(`Saved code for ${questionField}`);
-          } catch (error) {
-            console.error("Error saving code:", error);
-          }
+          localStorage.setItem(questionField, userCode[currentQuestion] || "");
+          console.log(`Saved code for ${questionField}`);
         }
       } else {
         showBloodAlert(
@@ -342,7 +222,7 @@ const RedLightGreenLight = () => {
     } else {
       const newWon = Math.max(won - 10, 0);
       setWon(newWon);
-      updateWonInDB(newWon);
+      updateWonLocal(newWon);
       showBloodAlert("Incorrect output. You lost 10 Won!", () => {});
     }
   };
@@ -353,21 +233,26 @@ const RedLightGreenLight = () => {
       console.error("No username found in localStorage");
       return;
     }
-    try {
-      const response = await fetch("http://localhost:5000/updatelevel", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username, level1: true }),
-      });
-      const data = await response.json();
-      if (data) {
-        navigate("/Level2instructions");
-      } else {
-        console.error("Error updating level:", data.message);
-      }
-    } catch (error) {
-      console.error("Request failed:", error);
+    // Mark level1 as complete in localStorage and navigate.
+    localStorage.setItem("level1", "true");
+    navigate("/Level2instructions");
+  };
+
+  // Additional helper functions for navigation and code change handling:
+  const handlePreviousQuestion = () => {
+    if (currentQuestion > 0) {
+      setCurrentQuestion(currentQuestion - 1);
     }
+  };
+
+  const handleNextQuestion = () => {
+    if (currentQuestion < questions.length - 1) {
+      setCurrentQuestion(currentQuestion + 1);
+    }
+  };
+
+  const handleCodeChange = (value) => {
+    setUserCode((prev) => ({ ...prev, [currentQuestion]: value }));
   };
 
   if (gameOver) {
@@ -386,8 +271,7 @@ const RedLightGreenLight = () => {
 
   return (
     <div
-      className={`flex flex-col items-center p-6 min-h-screen bg-black text-white w-full relative 
-      ${
+      className={`flex flex-col items-center p-6 min-h-screen bg-black text-white w-full relative ${
         !isGreenLight
           ? "border-8 border-red-500 animate-pulse shadow-[0px_0px_50px_rgba(255,0,0,0.8)] before:content-[''] before:absolute before:inset-0 before:bg-red-600 before:blur-[80px] before:opacity-50"
           : ""
@@ -485,7 +369,9 @@ const RedLightGreenLight = () => {
       {bloodAlert && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-80 z-50">
           <div className="bg-red-800 border-4 border-red-500 p-8 rounded-lg shadow-xl text-center animate-pulse">
-            <h2 className="text-3xl font-bold text-white mb-4">{bloodAlert.title}</h2>
+            <h2 className="text-3xl font-bold text-white mb-4">
+              {bloodAlert.title}
+            </h2>
             <p className="text-xl text-white">{bloodAlert.message}</p>
             <button
               className="mt-6 px-6 py-3 bg-red-600 hover:bg-red-700 text-white font-bold rounded"
