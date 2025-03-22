@@ -1,9 +1,15 @@
-/** @type {import('@tailwindcss').Config} */
-const plugin=require("tailwindcss/plugin")
-export default{
-    content:["./index.html","./src//*.{js,ts,jsx,tsx}"],
-    theme:{
+/** @type {import('tailwindcss').Config} */
+const plugin = require("tailwindcss/plugin");
 
+module.exports = {
+  content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
+  theme: {
+    extend: {
+      screens: {
+        '4k': '2560px', // Custom breakpoint for 4K resolution
+      },
     },
-    plugins:[],
-}
+  },
+  variants: {},
+  plugins: [],
+};

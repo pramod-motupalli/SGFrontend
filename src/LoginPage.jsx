@@ -1,78 +1,16 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Square, Circle, Triangle } from "lucide-react";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 
 const LoginPage = () => {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [showForm, setShowForm] = useState(false);
-  const [message, setMessage] = useState("");
-  const [loading, setLoading] = useState(false);
+  const [playerId, setPlayerId] = useState("");
   const navigate = useNavigate();
 
-  // Array of users
-  const usersData = [
-    {
-      username: "bhavani@gmail.com",
-      password: "Bhavani",
-      playerid: "player572",
-      level1: true,
-      level2: false,
-      eliminated: false,
-    },
-    {
-      username: "pramod@gmail.com",
-      password: "Pramod",
-      playerid: "player531",
-      level1: true,
-      level2: false,
-      eliminated: false,
-    },
-    {
-      username: "snehitha@gmail.com",
-      password: "Snehitha",
-      playerid: "player526",
-      level1: true,
-      level2: false,
-      eliminated: false,
-    },
-  ];
-  
-  // Save the users array to localStorage if not already present
-  useEffect(() => {
-    if (!localStorage.getItem("users")) {
-      localStorage.setItem("users", JSON.stringify(usersData));
-    }
-  }, [usersData]);
-
-  // Handle login
-  const handleSubmit = (e) => {
+  const handleStart = (e) => {
     e.preventDefault();
-    setLoading(true);
-    setMessage("");
-
-    // Retrieve stored users array from localStorage
-    const storedUsers = JSON.parse(localStorage.getItem("users")) || [];
-    const inputUsername = username.trim();
-    const inputPassword = password.trim();
-
-    // Check if any user matches the entered credentials
-    const foundUser = storedUsers.find(
-      (user) =>
-        user.username === inputUsername && user.password === inputPassword
-    );
-
-    if (foundUser) {
-      // Save login info to localStorage
-      localStorage.setItem("loggedInUser", JSON.stringify(foundUser));
-      localStorage.setItem("username", inputUsername);
-      setMessage(`✅ Welcome, ${inputUsername}!`);
-      setTimeout(() => navigate("/HomePage"), 1000);
-    } else {
-      setMessage("❌ Invalid credentials. Please try again.");
-    }
-    setLoading(false);
+    localStorage.setItem("playerId", playerId.trim());
+    navigate("/HomePage");
   };
 
   return (
@@ -84,7 +22,7 @@ const LoginPage = () => {
 
       <motion.div
         initial={{ x: "100%", opacity: 0 }}
-        animate={{ x: showForm ? "0%" : "100%", opacity: showForm ? 1 : 0 }}
+        animate={{ x: "0%", opacity: 1 }}
         transition={{ duration: 0.5 }}
         className="relative p-6 sm:p-8 rounded-lg w-full max-w-sm sm:max-w-md md:max-w-lg lg:max-w-xl text-center z-10"
         style={{ backgroundColor: "rgba(0, 0, 0, 0.5)" }}
@@ -95,28 +33,18 @@ const LoginPage = () => {
           <Square size={50} className="text-white" />
         </div>
         <h1 className="text-cyan-700 font-bold text-2xl sm:text-3xl mb-5">
-          Login to Squid Game
+          Enter your Player ID
         </h1>
-
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleStart}>
           <div className="mb-4 text-left">
-            <label className="block mb-1 text-emerald-50 text-3xl">Email</label>
+            <label className="block mb-1 text-emerald-50 text-3xl">
+              Player ID
+            </label>
             <input
               type="text"
-              placeholder="Enter E-mail"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              required
-              className="w-full p-2 border border-gray-700 rounded bg-gray-900 text-white focus:outline-none focus:border-red-600"
-            />
-          </div>
-          <div className="mb-4 text-left">
-            <label className="block mb-1 text-emerald-50 text-3xl">Password</label>
-            <input
-              type="password"
-              placeholder="Enter password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              placeholder="Enter your Player ID"
+              value={playerId}
+              onChange={(e) => setPlayerId(e.target.value)}
               required
               className="w-full p-2 border border-gray-700 rounded bg-gray-900 text-white focus:outline-none focus:border-red-600"
             />
@@ -124,21 +52,11 @@ const LoginPage = () => {
           <button
             type="submit"
             className="w-full p-2 bg-blue-400 text-black font-roboto text-lg rounded cursor-pointer hover:bg-blue-500 active:bg-blue-400"
-            disabled={loading}
           >
-            {loading ? "Logging in..." : "Login"}
+            Let's Start
           </button>
         </form>
-
-        {message && <p className="mt-4 text-white">{message}</p>}
       </motion.div>
-
-      <button
-        onClick={() => setShowForm(!showForm)}
-        className="absolute bottom-10 bg-blue-400 text-black font-bold px-4 py-2 rounded cursor-pointer hover:bg-blue-500 z-10"
-      >
-        {showForm ? "Hide Login" : "Show Login"}
-      </button>
     </div>
   );
 };

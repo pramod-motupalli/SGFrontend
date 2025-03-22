@@ -13,6 +13,10 @@ import TugOfWarDisqualified from "./TugOfWarDisqualified.jsx";
 import Thankyou from "./Thankyou.jsx";
 import ContinuousBloodStainEffect from "./ContinuousRedTrailEffect"; // Import the effect
 import PairingButton from "./pair.jsx";
+import EightQueensPuzzle from "./EightQueensPuzzle.jsx"
+import LightsOutPuzzle from "./LightsOutPuzzle.jsx"
+import Sudoku from"./Sudoku.jsx"
+import Game2048 from"./Game2048.jsx"
 const App = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
@@ -27,6 +31,10 @@ const App = () => {
           element={isAuthenticated ? <HomePage /> : <LoginPage />}
         />
         <Route path="/HomePage" element={<HomePage />} />
+        <Route path="/EightQueensPuzzle" element={<EightQueensPuzzle />} />
+        <Route path="/LightsOutPuzzle" element={<LightsOutPuzzle />} />
+        <Route path="/Game2048" element={<Game2048 />} />
+        <Route path="/Sudoku" element={<Sudoku />} />
         <Route path="/pair" element={<PairingButton />} />
         <Route path="/level1-instructions" element={<Level1Instructions />} />
         <Route path="/level1/game" element={<RedLightGreenLight />} />
