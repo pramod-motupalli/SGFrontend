@@ -73,7 +73,7 @@ const TowerOfHanoiPuzzle = () => {
         // Check win condition: all disks moved to the third tower
         if (newTowers[2].length === numDisks) { 
           setMessage("Congratulations! Puzzle solved.");
-          navigate("/Thankyou");
+          navigate("/Congratulations");
         }
       } else {
         setMessage("Invalid move: you cannot place a larger disk on a smaller one.");

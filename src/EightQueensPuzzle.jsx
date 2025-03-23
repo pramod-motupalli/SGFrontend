@@ -69,7 +69,7 @@ const EightQueensPuzzle = () => {
     if (isValidSolution()) {
       setMessage("Congratulations! Valid solution.");
       // Navigate to thank you page when solved successfully
-      navigate("/Thankyou");
+      navigate("/Congratulations");
     } else {
       setMessage("Not a valid solution. Try again!");
     }

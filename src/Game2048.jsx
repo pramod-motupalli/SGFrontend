@@ -116,7 +116,7 @@ const Game2048 = () => {
   // Navigate to ThankYou page if 2048 is reached.
   useEffect(() => {
     if (grid.flat().some((cell) => cell === 2048)) {
-      navigate("/Thankyou");
+      navigate("/Congratulations");
     }
   }, [grid, navigate]);
 
