@@ -316,13 +316,13 @@ const TugOfWar = () => {
           )}
         </div>
       </div>
-      <button
+      {/* <button
         onClick={() => navigate("/Level3instructions")}
         className="mt-6 px-6 py-3 text-lg font-bold rounded bg-teal-500 hover:bg-teal-700 text-white"
         disabled={isSubmitting}
       >
         Next Level
-      </button>
+      </button> */}
     </div>
   );
 };

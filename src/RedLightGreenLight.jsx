@@ -21,7 +21,7 @@ const disableCopyPaste = EditorView.domEventHandlers({
   },
 });
 
-const squidGameMusic = "/public/images/squid game music.mpeg";
+const squidGameMusic = "/public/images/squidgamemusic.mp3";
 
 const RedLightGreenLight = () => {
   const navigate = useNavigate();
