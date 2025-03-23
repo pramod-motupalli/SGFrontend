@@ -304,14 +304,14 @@ const RedLightGreenLight = () => {
           >
             {questions[currentQuestion].prompt}
           </pre>
-          <div className="flex space-x-4 mt-4">
+          {/* <div className="flex space-x-4 mt-4">
             <button onClick={handlePreviousQuestion} className="px-4 py-2 bg-blue-700 hover:bg-blue-900 text-white rounded" disabled={currentQuestion === 0}>
               Previous
             </button>
             <button onClick={handleNextQuestion} className="px-4 py-2 bg-green-500 hover:bg-emerald-700 text-white rounded" disabled={currentQuestion === questions.length - 1}>
               Next
             </button>
-          </div>
+          </div> */}
         </div>
         <div className="w-full lg:w-1/2">
           <CodeMirror
