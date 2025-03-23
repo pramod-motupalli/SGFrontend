@@ -65,7 +65,7 @@ const RedLightGreenLight = () => {
     // },
     {
       prompt:
-        "// Fix the bug in this code\n#incude <stdoi.h>\nint sumOfDigits(int n) {\nint sum = 0;\nwhle (n > 0)\n{\nsum += n % 10; \nn = n/10; \n}\nreturn sum\n}\nint man() {\nint num = 30213468; \n print('Sum of digits of %D is %D', num, sumOfDigits(num));\n return 0,\n}\n\n NOTE:Make sure to write the same code without \nchanging anything",
+        "// Fix the bug in this code\n#incude <stdoi.h>\nint sumOfDigits(int n) {\nint sum = 0;\nwhle (n > 0)\n{\nsum += n % 10; \nn = n/10; \n}\nreturn sum\n}\nint man() {\nint num = 30213468; \n print('Sum of digits of %D is %D', num, sumOfDigits(num));\n return 0,\n}\n\n NOTE:Make sure to write the code by removing errors \n",
       expected: '#include<stdio.h>intsumOfDigits(int n){intsum=0;while(n>0){sum+=n%10;n=n/10;}returnsum;}intmain(){intnum=30213468;printf("Sumofdigitsof%dis%d",num,sumOfDigits(num));return0;}',
     },
   ];
