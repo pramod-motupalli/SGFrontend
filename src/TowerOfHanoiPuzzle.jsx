@@ -10,7 +10,7 @@ const getInitialTowers = (n) => [
 ];
 
 const TowerOfHanoiPuzzle = () => {
-  const navigate = useNavigate(); // Moved inside the component body
+  const navigate = useNavigate();
   const [numDisks] = useState(initialDisks);
   const [towers, setTowers] = useState(getInitialTowers(initialDisks));
   const [selectedTower, setSelectedTower] = useState(null);
@@ -170,8 +170,10 @@ const TowerOfHanoiPuzzle = () => {
   };
 
   return (
-    <div className="min-h-screen bg-black flex flex-col items-center justify-center p-4">
-      <h1 className="text-4xl font-bold mb-4 text-center text-amber-50">Tower of Hanoi Puzzle</h1>
+    <div className="min-h-screen bg-black flex flex-col items-center justify-center p-4 sm:p-8">
+      <h1 className="text-4xl font-bold mb-4 text-center text-amber-50">
+        Tower of Hanoi Puzzle
+      </h1>
 
       {/* Instruction Section */}
       <div className="bg-black/50 p-4 rounded-md text-white text-center max-w-xl mb-6">
@@ -202,15 +204,15 @@ const TowerOfHanoiPuzzle = () => {
       </div>
 
       {/* Towers Container */}
-      <div className="flex flex-col sm:flex-row items-end justify-center gap-4 w-full max-w-4xl">
+      <div className="flex flex-wrap sm:flex-nowrap items-end justify-center gap-4 w-full max-w-3xl">
         {towers.map((tower, towerIndex) => (
           <div
             key={towerIndex}
             onClick={() => handleTowerClick(towerIndex)}
             className={`flex flex-col-reverse items-center justify-end p-2 rounded-md cursor-pointer transition-transform duration-200 
               ${selectedTower === towerIndex ? "border-4 border-green-600 scale-105" : "border border-gray-400"} 
-              ${towerIndex === 2 ? "bg-green-400" : "bg-gray-800"}`}
-            style={{ minHeight: "100px", flex: "1" }}
+              ${towerIndex === 2 ? "bg-green-400" : "bg-gray-800"} w-full sm:w-1/3`}
+            style={{ minHeight: "200px" }}
           >
             {tower.map((disk, index) => (
               <React.Fragment key={index}>{renderDisk(disk)}</React.Fragment>
