@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 const TugOfWar = () => {
   const navigate = useNavigate();
   const tugWarControls = useAnimation();
+
   const totalQuestions = 10;
   const challengeDuration = 900; // 15 minutes in seconds
 
@@ -27,7 +28,6 @@ const TugOfWar = () => {
   // ------------------------------
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState(null);
-  const [completedQuestions, setCompletedQuestions] = useState([]);
   const [score, setScore] = useState(0);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
@@ -148,14 +148,13 @@ const TugOfWar = () => {
       window.open(
         "https://squidgame2025.vercel.app/Level3instructions",
         "_self"
-    );
+      );
     } else {
       setGameOver(true);
       window.open(
         "https://squidgame2025.vercel.app/TugOfWarDisqualified",
         "_self"
-    );
-      // Optionally display an alert for insufficient correct answers
+      );
     }
   }, [currentQuestion, selectedAnswer, totalQuestions, questions, navigate]);
 
@@ -228,28 +227,34 @@ const TugOfWar = () => {
   const seconds = String(Math.floor((timeLeft / 1000) % 60)).padStart(2, "0");
 
   return (
-    <div className="flex flex-col items-center p-6 min-h-screen bg-black text-white relative">
-      <div className="absolute top-4 left-4 px-8 py-4 rounded-md text-yellow-400 font-bold text-xl">
-        Player ID: {localStorage.getItem("playerId") || "Guest"}
+    <div className="flex flex-col items-center p-4 sm:p-6 min-h-screen bg-black text-white">
+      {/* Header */}
+      <div className="w-full flex justify-between items-center mb-4">
+        <div className="text-yellow-400 font-bold text-base sm:text-xl">
+          Player ID: {localStorage.getItem("playerId") || "Guest"}
+        </div>
+        <h1 className="text-xl sm:text-2xl md:text-4xl font-bold text-center">
+          Tug of War Challenge
+        </h1>
+        {/* Empty div as a placeholder to balance the header */}
+        <div className="w-24" />
       </div>
-      <h1 className="text-2xl md:text-4xl font-bold mb-4 text-center">
-        Tug of War Challenge
-      </h1>
-      <p className="mb-2">
+
+      <p className="mb-2 text-sm sm:text-base">
         Question {currentQuestion + 1} of {totalQuestions}
       </p>
-      <p className="text-xl font-bold text-red-400 mb-4">
+      <p className="text-lg sm:text-xl font-bold text-red-400 mb-4">
         ⏳ Time Left: {minutes}:{seconds}
       </p>
 
       <motion.div
-        className="relative w-1/2 h-40 flex justify-between items-center mt-4"
+        className="relative w-full sm:w-3/4 md:w-1/2 h-32 sm:h-40 flex justify-between items-center mt-4"
         animate={tugWarControls}
       >
         <motion.img
           src="/images/TeamA.png"
           alt="Team A"
-          className="w-32 h-32 z-10"
+          className="w-20 sm:w-32 h-20 sm:h-32 z-10"
           animate={{ x: -ropePosition / 2 }}
           transition={{ type: "spring", stiffness: 100 }}
         />
@@ -262,21 +267,21 @@ const TugOfWar = () => {
         <motion.img
           src="/images/TeamB.png"
           alt="Team B"
-          className="w-32 h-32 z-10"
+          className="w-20 sm:w-32 h-20 sm:h-32 z-10"
           animate={{ x: ropePosition / 2 }}
           transition={{ type: "spring", stiffness: 100 }}
         />
       </motion.div>
 
-      <div className="my-6 w-1/2 flex justify-center">
-        <div className="bg-gray-800 p-4 rounded-lg text-center w-full">
-          <p className="mt-2 text-xl">{questions[currentQuestion]?.question}</p>
+      <div className="my-6 w-full sm:w-3/4 md:w-1/2 flex justify-center">
+        <div className="bg-gray-800 p-4 sm:p-6 rounded-lg text-center w-full">
+          <p className="mt-2 text-base sm:text-xl">{questions[currentQuestion]?.question}</p>
           <div className="mt-4 grid grid-cols-2 gap-4">
             {questions[currentQuestion]?.options.map((option, index) => (
               <button
                 key={index}
                 onClick={() => handleOptionSelect(option)}
-                className={`px-4 py-2 rounded text-white ${
+                className={`px-2 sm:px-4 py-2 rounded text-white ${
                   selectedAnswer === option ? "bg-blue-600" : "bg-gray-700"
                 } hover:bg-blue-800`}
                 disabled={isSubmitting}
@@ -287,7 +292,7 @@ const TugOfWar = () => {
           </div>
           <div className="mt-4 flex justify-between">
             <button
-              className="px-6 py-2 bg-amber-500 hover:bg-amber-600 text-white rounded"
+              className="px-4 sm:px-6 py-2 bg-amber-500 hover:bg-amber-600 text-white rounded text-sm sm:text-base"
               onClick={handlePreviousQuestion}
               disabled={currentQuestion === 0 || isSubmitting}
             >
@@ -295,7 +300,7 @@ const TugOfWar = () => {
             </button>
             {currentQuestion === totalQuestions - 1 ? (
               <button
-                className="px-6 py-2 bg-red-600 hover:bg-red-700 text-white rounded"
+                className="px-4 sm:px-6 py-2 bg-red-600 hover:bg-red-700 text-white rounded text-sm sm:text-base"
                 onClick={handleFinalSubmit}
                 disabled={isSubmitting}
               >
@@ -303,7 +308,7 @@ const TugOfWar = () => {
               </button>
             ) : (
               <button
-                className="px-6 py-2 bg-green-600 hover:bg-green-700 text-white rounded"
+                className="px-4 sm:px-6 py-2 bg-green-600 hover:bg-green-700 text-white rounded text-sm sm:text-base"
                 onClick={handleNextQuestion}
                 disabled={isSubmitting}
               >
@@ -316,13 +321,6 @@ const TugOfWar = () => {
           )}
         </div>
       </div>
-      {/* <button
-        onClick={() => navigate("/Level3instructions")}
-        className="mt-6 px-6 py-3 text-lg font-bold rounded bg-teal-500 hover:bg-teal-700 text-white"
-        disabled={isSubmitting}
-      >
-        Next Level
-      </button> */}
     </div>
   );
 };
