@@ -178,7 +178,7 @@ const TowerOfHanoiPuzzle = () => {
         <p>
           Move all the disks from the first tower to the third tower.
           <br />
-          <span className="text-sm">
+          <span className="text-sm font-extrabold">
             Click on a tower to select its top disk, then click another tower to move it.
           </span>
         </p>
