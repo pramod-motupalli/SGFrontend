@@ -145,10 +145,16 @@ const TugOfWar = () => {
     localStorage.setItem("score", correctCount);
     setIsSubmitting(false);
     if (correctCount >= 6) {
-      navigate("/Level3instructions");
+      window.open(
+        "https://squidgame2025.vercel.app/Level3instructions",
+        "_self"
+    );
     } else {
       setGameOver(true);
-      navigate("/Thankyou");
+      window.open(
+        "https://squidgame2025.vercel.app/TugOfWarDisqualified",
+        "_self"
+    );
       // Optionally display an alert for insufficient correct answers
     }
   }, [currentQuestion, selectedAnswer, totalQuestions, questions, navigate]);
