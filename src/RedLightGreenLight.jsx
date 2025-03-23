@@ -285,7 +285,7 @@ const RedLightGreenLight = () => {
 
       {/* Main Heading */}
       <h1 className="mt-4 text-3xl bg-gradient-to-r from-purple-500 to-pink-500 bg-clip-text text-transparent md:text-4xl font-bold mb-6 text-center">
-        red light, green light
+        Red light, Green light
       </h1>
 
       <div className="flex flex-col lg:flex-row w-full max-w-6xl space-y-4 lg:space-y-0 lg:space-x-4 relative">
@@ -299,14 +299,14 @@ const RedLightGreenLight = () => {
           <pre className="bg-gray-800 p-4 rounded-md w-full overflow-auto mb-4 text-sm md:text-base select-none" onContextMenu={(e) => e.preventDefault()} onCopy={(e) => e.preventDefault()} style={{ userSelect: "none", cursor: "default" }}>
             {questions[currentQuestion].prompt}
           </pre>
-          <div className="flex space-x-4 mt-4">
+          {/* <div className="flex space-x-4 mt-4">
             <button onClick={handlePreviousQuestion} className="px-4 py-2 bg-blue-700 hover:bg-blue-900 text-white rounded" disabled={currentQuestion === 0}>
               previous
             </button>
             <button onClick={handleNextQuestion} className="px-4 py-2 bg-green-500 hover:bg-emerald-700 text-white rounded" disabled={currentQuestion === questions.length - 1}>
               next
             </button>
-          </div>
+          </div> */}
         </div>
         <div className="w-full lg:w-1/2">
           <CodeMirror

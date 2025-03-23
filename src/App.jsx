@@ -17,7 +17,7 @@ import EightQueensPuzzle from "./EightQueensPuzzle.jsx"
 import TowerOfHanoiPuzzle from "./TowerOfHanoiPuzzle.jsx"
 import Sudoku from"./Sudoku.jsx"
 import Game2048 from"./Game2048.jsx"
-
+import Congratulations from"./Congratulations.jsx"
 import LightsOut from"./TypingChallenge.jsx"
 const App = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -33,6 +33,7 @@ const App = () => {
           element={isAuthenticated ? <HomePage /> : <LoginPage />}
         />
         <Route path="/HomePage" element={<HomePage />} />
+        <Route path="/Congratulations" element={<Congratulations />} />
         <Route path="/EightQueensPuzzle" element={<EightQueensPuzzle />} />
         <Route path="/TowerOfHanoiPuzzle" element={<TowerOfHanoiPuzzle />} />
         <Route path="/Game2048" element={<Game2048 />} />
