@@ -12,7 +12,7 @@ const HomePage = () => {
 
   // Slider state and sample data for dynamic player details
   const [currentSlide, setCurrentSlide] = useState(0);
-  const playerNames = ["Pramod", "Snehitha Mankena", "Bhavani Maradapu"];
+  const playerNames = ["Pramod Motupalli", "Snehitha Mankena", "Bhavani Maradapu"];
   const playerIds = ["Player531", "Player526", "Player572"];
 
   // Slider navigation functions
@@ -36,7 +36,7 @@ const HomePage = () => {
     const storedTimer = localStorage.getItem("hometimer");
     if (!storedTimer) {
       // Set timer to 200 minutes from now
-      const expirationTime = Date.now() + 200 * 60 * 1000;
+      const expirationTime = Date.now() + 2 * 60 * 1000;
       localStorage.setItem("hometimer", expirationTime);
       setRemainingTime(expirationTime - Date.now());
     } else {
@@ -74,7 +74,7 @@ const HomePage = () => {
   };
 
   return (
-    <div className="container mx-auto p-4 4k:p-8 bg-black min-h-screen min-w-screen text-white relative">
+    <div className="container mx-auto p-4 4k:p-8 bg-black min-h-screen min-w-full text-white relative">
       {/* Player ID & Timer Display (Top-Left & Top-Right) */}
       <div className="absolute top-2 left-2 sm:top-4 sm:left-4 z-10 px-3 py-1 rounded-md text-xs sm:text-sm md:text-2xl 4k:text-4xl shadow-md bg-gradient-to-r from-blue-500 via-pink-500 to-green-500 bg-clip-text text-transparent font-extrabold">
         Welcome, {playerId || "N/A"}
@@ -169,14 +169,14 @@ const HomePage = () => {
                       "The team that pulls the rope completely to their side wins the round.",
                     ],
                   },
-                  {
-                    title: "Level 3: Single and Mingle (Algorithmic Showdown)",
-                    rules: [
-                      "Each pair will receive an algorithm and pseudo code.",
-                      "The team should predict the suitable data structure to solve it and complete the code.",
-                      "The teams that correctly implement them will be declared the winners.",
-                    ],
-                  },
+                  // {
+                  //   title: "Level 3: Single and Mingle (Algorithmic Showdown)",
+                  //   rules: [
+                  //     "Each pair will receive an algorithm and pseudo code.",
+                  //     "The team should predict the suitable data structure to solve it and complete the code.",
+                  //     "The teams that correctly implement them will be declared the winners.",
+                  //   ],
+                  // },
                 ].map((level, index) => (
                   <div
                     key={index}

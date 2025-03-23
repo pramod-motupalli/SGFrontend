@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 
 const Level3Instructions = () => {
   const navigate = useNavigate();
-  const [timeLeft, setTimeLeft] = useState(3); // Timer in seconds
+  const [timeLeft, setTimeLeft] = useState(60); // Timer in seconds
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -49,15 +49,15 @@ const Level3Instructions = () => {
           Welcome to the final level! Follow the instructions carefully:
         </p>
         <ul className="mt-4 text-left space-y-2">
-          <li>🔹 Each pair will receive an algorithm and pseudo code.</li>
+          {/* <li>🔹 Each pair will receive an algorithm and pseudo code.</li>
           <li>
             🔹 The team should predict the suitable data structure to solve it.
           </li>
           <li>
             🔹 The team must analyze and complete the given pseudo code.
-          </li>
+          </li> */}
           <li>
-            🔹 The teams that correctly implement them will be declared the winners.
+            🔹 Select a symbol in the next page and then wait for surprise...
           </li>
         </ul>
       </div>

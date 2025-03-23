@@ -29,8 +29,8 @@ const LoginPage = () => {
       >
         <div className="flex justify-center mb-5 space-x-2">
           <Circle size={50} className="text-white" />
-          <Triangle size={50} className="text-white" />
           <Square size={50} className="text-white" />
+          <Triangle size={50} className="text-white" />
         </div>
         <h1 className="text-cyan-700 font-bold text-2xl sm:text-3xl mb-5">
           Enter your Player ID

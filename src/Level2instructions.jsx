@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 
 const Level2Instructions = () => {
   const navigate = useNavigate();
-  const [timeLeft, setTimeLeft] = useState(3); // Timer in seconds
+  const [timeLeft, setTimeLeft] = useState(60); // Timer in seconds
 
   // Format time as MM:SS
   const formatTime = (seconds) => {
@@ -59,16 +59,14 @@ const Level2Instructions = () => {
         </p>
         <ul className="mt-4 text-left space-y-2">
           <li>
-            🔹 Both teams receive the same set of aptitude and logical reasoning questions.
+            🔹The player recieves a set of aptitude and logical reasoning questions.
+          </li>
+         
+          <li>
+            🔹 The virtual rope indicates they are playing against the time.
           </li>
           <li>
-            🔹 Correct answers move the virtual rope toward their team’s side.
-          </li>
-          <li>
-            🔹 The team that pulls the rope completely to their side wins the round.
-          </li>
-          <li>
-            🔹 The winning team will be qualified to the next level of the game.
+            🔹 The player will be qualified to the next level of the game if he solves more than 6 questions correctly.
           </li>
         </ul>
       </div>

@@ -4,37 +4,32 @@ import { cpp } from "@codemirror/lang-cpp";
 import { dracula } from "@uiw/codemirror-theme-dracula";
 import { useNavigate } from "react-router-dom";
 import { EditorView } from "@codemirror/view";
-import { motion, useAnimation } from "framer-motion";
 
+// Disable copy/paste functionality in the editor
 const disableCopyPaste = EditorView.domEventHandlers({
-  copy: (event, view) => {
+  copy: (event) => {
     event.preventDefault();
     return true;
   },
-  cut: (event, view) => {
+  cut: (event) => {
     event.preventDefault();
     return true;
   },
-  paste: (event, view) => {
+  paste: (event) => {
     event.preventDefault();
     return true;
   },
 });
 
-const squidGameMusic = "/public/images/squid game music.mpeg";
+// Correct the file path for the audio (the public folder is automatically served)
+const squidGameMusic = "/images/squid game music.mpeg";
 
 const RedLightGreenLight = () => {
   const navigate = useNavigate();
-  const tugWarControls = useAnimation();
 
   // Custom blood alert state and helper function
   const [bloodAlert, setBloodAlert] = useState(null);
-  const showBloodAlert = (
-    message,
-    onClose,
-    buttonText = "OK",
-    title = "Blood Bath Alert!"
-  ) => {
+  const showBloodAlert = (message, onClose, buttonText = "OK", title = "Blood Bath Alert!") => {
     setBloodAlert({ message, onClose, buttonText, title });
   };
 
@@ -56,53 +51,47 @@ const RedLightGreenLight = () => {
   };
 
   // ------------------------------
-  // Question & Code States (declare before timer effect)
+  // Question & Code States
   // ------------------------------
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [completedQuestions, setCompletedQuestions] = useState([]);
   const [userCode, setUserCode] = useState({});
+
   const questions = [
     {
       prompt:
-        "// Fix the bug in this function\n#include <stdio.h>\nint main() {\n  for(i=0;i<10;i+)\n{\nprint('Hello')}\n  return 0;\n}",
-      expected: "Hello",
-    },
-    {
-      prompt:
-        "// Fix the bug in this code\ninclude <stduio.h>\nint isPrime(it num) {\nif (num < 2) return 0, \nfor ( i = 2, i * i <= num; i+) {\nif (num % i == 0) return 0,\n}\n return 1;\n}\nint main() {\nint number=31847726;\nif (isPrime(num)){\nprinf('%d is a prime number.', number);\nelse{\nprntf('%d is not a prime number.', num);\n return 0;\n}",
-      expected: "Hello",
-    },
-    {
-      prompt:
-        "// Fix the bug in this code\n#incude <stdoi.h>\nint sumOfDigits(int n) {\nint sum = 0;\nwhle (n > 0)\n{\nsum += n % (100/10); \nn = n/10; \n}\nreturn s;\nint man() {\nint num = 30213468; \n print('Sum of digits of %D is %D', num, sumOfDigits(num));\n return 0,\n}",
-      expected: "Hello",
+        "// Fix the bug in this code\n#incude <stdoi.h>\nint sumOfDigits(int n) {\n  int sum = 0;\n  whle (n > 0)\n  {\n    sum += n % 10; \n    n = n/10; \n  }\n  return sum\n}\nint man() {\n  int num = 30213468; \n  print('Sum of digits of %D is %D', num, sumOfDigits(num));\n  return 0,\n}",
+      expected:
+        '#include<stdio.h>intsumOfDigits(int n){intsum=0;while(n>0){sum+=n%10;n=n/10;}returnsum;}intmain(){intnum=30213468;printf("Sumofdigitsof%dis%d",num,sumOfDigits(num));return0;}',
     },
   ];
+
   const [expectedOutput, setExpectedOutput] = useState("");
   useEffect(() => {
-    setExpectedOutput(questions[currentQuestion].expected);
+    // Normalize expected output to lowercase with no spaces
+    setExpectedOutput(questions[currentQuestion].expected.toLowerCase().replace(/\s/g, ""));
   }, [currentQuestion, questions]);
 
   // Retrieve saved code from localStorage on mount
   useEffect(() => {
     const savedCode = {};
-    const level1Q1 = localStorage.getItem("level1Q1");
-    const level1Q2 = localStorage.getItem("level1Q2");
-    const level1Q3 = localStorage.getItem("level1Q3");
-    if (level1Q1) savedCode[0] = level1Q1;
-    if (level1Q2) savedCode[1] = level1Q2;
-    if (level1Q3) savedCode[2] = level1Q3;
+    const code1 = localStorage.getItem("level1q1");
+    const code2 = localStorage.getItem("level1q2");
+    const code3 = localStorage.getItem("level1q3");
+    if (code1) savedCode[0] = code1;
+    if (code2) savedCode[1] = code2;
+    if (code3) savedCode[2] = code3;
     setUserCode(savedCode);
   }, []);
 
-  // Define handleGameOver before timer effect so it can be used safely.
+  // Define handleGameOver so it can be used safely in the timer
   const handleGameOver = useCallback(() => {
     localStorage.setItem("eliminated", "true");
     navigate("/Thankyou");
   }, [navigate]);
 
   // ------------------------------
-  // New 10-Minute Timer using localStorage ("l1timer")
+  // Timer Management using localStorage ("l1timer")
   // ------------------------------
   const [l1timeLeft, setL1TimeLeft] = useState(() => {
     const storedTimer = localStorage.getItem("l1timer");
@@ -120,20 +109,14 @@ const RedLightGreenLight = () => {
       const storedTimer = localStorage.getItem("l1timer");
       if (storedTimer) {
         const newTimeLeft = Math.max(parseInt(storedTimer, 10) - Date.now(), 0);
-        setL1TimeLeft(newTimeLeft);
+        setL1timeLeft(newTimeLeft);
         if (newTimeLeft <= 0) {
           clearInterval(intervalId);
-          // If all questions are complete and won > 60, navigate; else, game over.
           if (completedQuestions.length === questions.length && won > 60) {
             navigate("/Level2instructions");
           } else {
             setGameOver(true);
-            showBloodAlert(
-              "Game over!!!",
-              handleGameOver,
-              "Farewell",
-              "Blood Bath Finale"
-            );
+            showBloodAlert("Game over!!!", handleGameOver, "Farewell", "Blood Bath Finale");
           }
         }
       }
@@ -141,8 +124,7 @@ const RedLightGreenLight = () => {
     return () => clearInterval(intervalId);
   }, [completedQuestions, questions.length, won, navigate, handleGameOver]);
 
-  // Additional effect: if the player completes all questions before time runs out,
-  // check the conditions and navigate automatically.
+  // Automatically navigate to Level 2 if all questions are completed and won > 60
   useEffect(() => {
     if (completedQuestions.length === questions.length && won > 60) {
       navigate("/Level2instructions");
@@ -160,13 +142,13 @@ const RedLightGreenLight = () => {
   const username = localStorage.getItem("username");
 
   // ------------------------------
-  // Red/Green Light Management & Audio Playback
+  // Red/Green Light & Audio Playback
   // ------------------------------
   useEffect(() => {
     const interval = setInterval(() => {
       setIsGreenLight(false);
       audio.play().catch((error) => console.log("Audio play blocked:", error));
-      const redLightDuration = 31; // exactly 31 seconds
+      const redLightDuration = 5.31; // seconds
       setTimeout(() => {
         setIsGreenLight(true);
         audio.pause();
@@ -185,41 +167,36 @@ const RedLightGreenLight = () => {
   const handleCodeChange = (newValue) => {
     const prevValue = userCode[currentQuestion] || "";
     const diff = newValue.length - prevValue.length;
-
-    // If it's red light and new letters are added, subtract won accordingly.
     if (!isGreenLight && diff > 0) {
       const updatedWon = Math.max(won - diff, 0);
       setWon(updatedWon);
       localStorage.setItem("won", updatedWon);
     }
-
-    // Update the code state for the current question.
     setUserCode((prev) => ({ ...prev, [currentQuestion]: newValue }));
   };
 
   // ------------------------------
-  // Code Compilation Simulation (optional)
+  // Code Compilation Simulation (Optional)
   // ------------------------------
-  const handleCompileRun = async () => {
+  const handleCompileRun = () => {
     setCompiling(true);
     setTimeout(() => {
       const codeToCheck = userCode[currentQuestion] || "";
-      if (codeToCheck.includes("fix")) {
+      if (codeToCheck.toLowerCase().includes("fix")) {
         setOutput(expectedOutput);
       } else {
-        setOutput("Error in execution");
+        setOutput("errorinexecution");
       }
       setCompiling(false);
     }, 1000);
   };
 
   // ------------------------------
-  // Submission Handler: Compare editor text with expected output
+  // Submission Handler
   // ------------------------------
-  const handleSubmit = async () => {
-    const codeEntered = (userCode[currentQuestion] || "").trim();
-    const expected = expectedOutput.trim();
-
+  const handleSubmit = () => {
+    const codeEntered = (userCode[currentQuestion] || "").toLowerCase().replace(/\s/g, "");
+    const expected = expectedOutput.toLowerCase().replace(/\s/g, "");
     if (codeEntered === expected) {
       if (!completedQuestions.includes(currentQuestion)) {
         const newWon = won + 10;
@@ -227,9 +204,7 @@ const RedLightGreenLight = () => {
         updateWonLocal(newWon);
         setCompletedQuestions((prev) => [...prev, currentQuestion]);
         showBloodAlert(
-          `Correct! You earned 10 Won! Completed Questions: ${
-            completedQuestions.length + 1
-          }`,
+          `Correct! You earned 10 won! Completed questions: ${completedQuestions.length + 1}`,
           () => {},
           "Continue",
           "Slaughter of Success!"
@@ -238,32 +213,26 @@ const RedLightGreenLight = () => {
           setCurrentQuestion((prev) => prev + 1);
         }
         let questionField = "";
-        if (currentQuestion === 0) questionField = "level1Q1";
-        else if (currentQuestion === 1) questionField = "level1Q2";
-        else if (currentQuestion === 2) questionField = "level1Q3";
+        if (currentQuestion === 0) questionField = "level1q1";
+        else if (currentQuestion === 1) questionField = "level1q2";
+        else if (currentQuestion === 2) questionField = "level1q3";
         if (questionField) {
-          localStorage.setItem(
-            questionField,
-            userCode[currentQuestion] || ""
-          );
+          localStorage.setItem(questionField, userCode[currentQuestion] || "");
           console.log(`Saved code for ${questionField}`);
         }
       } else {
-        showBloodAlert(
-          "You've already completed this question. Move to the next one!",
-          () => {}
-        );
+        showBloodAlert("You've already completed this question. Move on to the next!", () => {});
       }
     } else {
       const newWon = Math.max(won - 10, 0);
       setWon(newWon);
       updateWonLocal(newWon);
-      showBloodAlert("Incorrect output. You lost 10 Won!", () => {});
+      showBloodAlert("Incorrect output. You lost 10 won!", () => {});
     }
   };
 
   // ------------------------------
-  // Navigation & Code Change Helpers
+  // Navigation Helpers
   // ------------------------------
   const handlePreviousQuestion = () => {
     if (currentQuestion > 0) setCurrentQuestion(currentQuestion - 1);
@@ -272,7 +241,7 @@ const RedLightGreenLight = () => {
     if (currentQuestion < questions.length - 1) setCurrentQuestion(currentQuestion + 1);
   };
 
-  const markLevel1Complete = async () => {
+  const markLevel1Complete = () => {
     const username = localStorage.getItem("username");
     if (!username) {
       console.error("No username found in localStorage");
@@ -283,17 +252,14 @@ const RedLightGreenLight = () => {
   };
 
   // ------------------------------
-  // Rendering (with header container to prevent overlap)
+  // Rendering
   // ------------------------------
   if (gameOver) {
     return (
       <div className="flex flex-col items-center justify-center min-h-screen bg-black text-white">
         <h1 className="text-3xl font-bold mb-4">Game Over</h1>
-        <button
-          onClick={() => navigate("/Thankyou")}
-          className="mt-6 px-6 py-3 text-lg font-bold rounded bg-teal-500 text-white"
-        >
-          Thank You!!!
+        <button onClick={() => navigate("/Thankyou")} className="mt-6 px-6 py-3 text-lg font-bold rounded bg-teal-500 text-white">
+          Thank You!
         </button>
       </div>
     );
@@ -302,18 +268,16 @@ const RedLightGreenLight = () => {
   return (
     <div
       className={`flex flex-col items-center p-6 min-h-screen bg-black text-white w-full relative ${
-        !isGreenLight
-          ? "border-8 border-red-500 animate-pulse shadow-[0px_0px_50px_rgba(255,0,0,0.8)] before:content-[''] before:absolute before:inset-0 before:bg-red-600 before:blur-[80px] before:opacity-50"
-          : ""
+        !isGreenLight ? "border-8 border-red-500 animate-pulse shadow-[0px_0px_50px_rgba(255,0,0,0.8)]" : ""
       }`}
     >
-      {/* Header Container: Player ID & Timer */}
+      {/* Header: Player ID & Timer */}
       <header className="w-full flex flex-col sm:flex-row justify-between items-center px-4 py-4">
         <div className="bg-gradient-to-r from-blue-500 via-red-500 to-green-500 bg-clip-text text-transparent mb-4 font-bold text-xl md:text-3xl">
-          Player ID: {localStorage.getItem("playerId") || "Guest"}
+          Player ID: {localStorage.getItem("playerId") || "guest"}
         </div>
         <div className="text-red-400 font-bold text-xl sm:text-2xl md:text-3xl">
-          ⏳ Time Left: {Math.floor(l1timeLeft / 1000 / 60)}:
+          ⏳ Time left: {Math.floor(l1timeLeft / 1000 / 60)}:
           {(Math.floor(l1timeLeft / 1000) % 60).toString().padStart(2, "0")}
         </div>
       </header>
@@ -326,13 +290,10 @@ const RedLightGreenLight = () => {
       <div className="flex flex-col lg:flex-row w-full max-w-6xl space-y-4 lg:space-y-0 lg:space-x-4 relative">
         <div className="w-full lg:w-1/2 relative">
           <p className="text-lg font-bold">Question:</p>
+          {/* Red Light overlay */}
           {!isGreenLight && (
             <div className="absolute inset-0 flex justify-center items-center bg-black bg-opacity-80 z-50">
-              <img
-                src="/images/dollred.jpg"
-                alt="Squid Game Doll"
-                className="w-96 md:w-96 h-48 md:h-96 animate-pulse"
-              />
+              <img src="/images/dollred.jpg" alt="Squid Game Doll" className="w-96 h-48 md:w-96 md:h-96 animate-pulse" />
             </div>
           )}
           <pre
@@ -344,18 +305,10 @@ const RedLightGreenLight = () => {
             {questions[currentQuestion].prompt}
           </pre>
           <div className="flex space-x-4 mt-4">
-            <button
-              onClick={handlePreviousQuestion}
-              className="px-4 py-2 bg-blue-700 hover:bg-blue-900 text-white rounded"
-              disabled={currentQuestion === 0}
-            >
+            <button onClick={handlePreviousQuestion} className="px-4 py-2 bg-blue-700 hover:bg-blue-900 text-white rounded" disabled={currentQuestion === 0}>
               Previous
             </button>
-            <button
-              onClick={handleNextQuestion}
-              className="px-4 py-2 bg-green-500 hover:bg-emerald-700 text-white rounded"
-              disabled={currentQuestion === questions.length - 1}
-            >
+            <button onClick={handleNextQuestion} className="px-4 py-2 bg-green-500 hover:bg-emerald-700 text-white rounded" disabled={currentQuestion === questions.length - 1}>
               Next
             </button>
           </div>
@@ -364,39 +317,25 @@ const RedLightGreenLight = () => {
           <CodeMirror
             value={userCode[currentQuestion] || ""}
             height="400px"
-            width="100%"
             extensions={[cpp(), disableCopyPaste]}
             theme={dracula}
             onChange={handleCodeChange}
           />
           <div className="flex mt-2 space-x-2">
-            <button
-              onClick={handleSubmit}
-              className="px-4 py-2 bg-yellow-500 hover:bg-amber-600 text-white rounded"
-            >
+            <button onClick={handleSubmit} className="px-4 py-2 bg-yellow-500 hover:bg-amber-600 text-white rounded">
               Submit
             </button>
           </div>
         </div>
       </div>
       <p className="text-lg">
-        Current Won:{" "}
-        <span className="font-bold text-yellow-400">{won} Won</span>
+        Current Won: <span className="font-bold text-yellow-400">{won} won</span>
       </p>
-      <button
-        onClick={markLevel1Complete}
-        className="mt-6 px-6 py-3 text-lg font-bold rounded bg-teal-500 hover:bg-teal-700 text-white"
-      >
-        Next Level
-      </button>
-
       {/* Custom Blood Alert Modal */}
       {bloodAlert && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-80 z-50">
           <div className="bg-red-800 border-4 border-red-500 p-8 rounded-lg shadow-xl text-center animate-pulse">
-            <h2 className="text-3xl font-bold text-white mb-4">
-              {bloodAlert.title}
-            </h2>
+            <h2 className="text-3xl font-bold text-white mb-4">{bloodAlert.title}</h2>
             <p className="text-xl text-white">{bloodAlert.message}</p>
             <button
               className="mt-6 px-6 py-3 bg-red-600 hover:bg-red-700 text-white font-bold rounded"

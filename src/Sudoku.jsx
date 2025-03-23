@@ -1,15 +1,15 @@
 import React, { useState } from "react";
 
 const initialPuzzle = [
-  [5, 3, 0, 0, 7, 0, 0, 0, 0],
+  [5, 3, 0, 0, 7, 0, 0, 1, 0],
   [6, 0, 0, 1, 9, 5, 0, 0, 0],
   [0, 9, 8, 0, 0, 0, 0, 6, 0],
-  [8, 0, 0, 0, 6, 0, 0, 0, 3],
+  [8, 0, 0, 0, 6, 0, 4, 0, 3],
   [4, 0, 0, 8, 0, 3, 0, 0, 1],
-  [7, 0, 0, 0, 2, 0, 0, 0, 6],
+  [7, 0, 3, 0, 2, 0, 0, 0, 6],
   [0, 6, 0, 0, 0, 0, 2, 8, 0],
   [0, 0, 0, 4, 1, 9, 0, 0, 5],
-  [0, 0, 0, 0, 8, 0, 0, 7, 9],
+  [0, 4, 0, 0, 8, 0, 0, 7, 9],
 ];
 
 const solution = [
@@ -53,6 +53,12 @@ const Sudoku = () => {
   return (
     <div className="min-h-screen bg-gray-800 flex flex-col items-center justify-center p-4 text-white">
       <h1 className="text-3xl font-bold mb-6">Sudoku Puzzle</h1>
+      <div className="bg-gray-700 p-4 rounded-lg mb-6 w-full sm:w-3/4 text-center">
+        <p className="text-lg">
+          Fill in the blank cells with numbers from 1 to 9. Some cells are pre-filled.
+          Use logic to complete the puzzle and then click "Check Solution" to verify your answer.
+        </p>
+      </div>
       <div className="grid grid-cols-9 gap-0.5 bg-black p-1">
         {board.map((row, i) =>
           row.map((cell, j) => (

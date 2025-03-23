@@ -1,8 +1,10 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const boardSize = 8;
 
 const EightQueensPuzzle = () => {
+  const navigate = useNavigate();
   // Create a board state: a 2D array of booleans (false = empty, true = queen)
   const [board, setBoard] = useState(
     Array.from({ length: boardSize }, () => Array(boardSize).fill(false))
@@ -66,6 +68,8 @@ const EightQueensPuzzle = () => {
   const checkSolution = () => {
     if (isValidSolution()) {
       setMessage("Congratulations! Valid solution.");
+      // Navigate to thank you page when solved successfully
+      navigate("/Thankyou");
     } else {
       setMessage("Not a valid solution. Try again!");
     }
@@ -73,8 +77,19 @@ const EightQueensPuzzle = () => {
 
   return (
     <div className="min-h-screen bg-gray-900 flex flex-col items-center justify-center p-4 text-white">
-      <h1 className="text-3xl font-bold mb-6">8 Queens Puzzle</h1>
-      <div className="grid grid-cols-8 gap-1 border-4 border-gray-700">
+      <h1 className="text-3xl font-bold mb-4 text-center">8 Queens Puzzle</h1>
+
+      {/* Instruction Section with Transparent Background */}
+      <div className="bg-black/50 p-4 rounded-md text-white text-center max-w-3xl mb-6">
+        <p>
+          Place exactly 8 queens on the chessboard so that no two queens threaten each other.
+          Click on a cell to place or remove a queen. When you're done, click "Check Solution" 
+          to see if you solved the puzzle!
+        </p>
+      </div>
+
+      {/* Chessboard */}
+      <div className="grid grid-cols-8 gap-1 border-4 border-gray-700 w-full max-w-md">
         {board.map((row, rowIndex) =>
           row.map((cell, colIndex) => {
             // Alternate cell colors for chessboard effect
@@ -83,7 +98,7 @@ const EightQueensPuzzle = () => {
               <button
                 key={`${rowIndex}-${colIndex}`}
                 onClick={() => toggleQueen(rowIndex, colIndex)}
-                className={`w-12 h-12 sm:w-16 sm:h-16 flex items-center justify-center border 
+                className={`w-10 h-10 sm:w-12 sm:h-12 md:w-16 md:h-16 flex items-center justify-center border 
                   ${isDark ? "bg-gray-700" : "bg-gray-300 text-gray-900"} 
                   ${cell ? "bg-red-500" : ""} 
                   focus:outline-none`}
@@ -94,14 +109,18 @@ const EightQueensPuzzle = () => {
           })
         )}
       </div>
+
+      {/* Check Solution Button */}
       <button
         onClick={checkSolution}
-        className="mt-6 px-6 py-3 bg-blue-600 hover:bg-blue-700 rounded font-bold"
+        className="mt-6 px-4 py-2 sm:px-6 sm:py-3 bg-blue-600 hover:bg-blue-700 rounded font-bold"
       >
         Check Solution
       </button>
+
+      {/* Message Display */}
       {message && (
-        <p className="mt-4 text-xl font-semibold">
+        <p className="mt-4 text-xl font-semibold text-center">
           {message}
         </p>
       )}

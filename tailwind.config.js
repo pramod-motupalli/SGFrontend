@@ -6,6 +6,7 @@ module.exports = {
   theme: {
     extend: {
       screens: {
+        xs: "375px",
         '4k': '2560px', // Custom breakpoint for 4K resolution
       },
     },

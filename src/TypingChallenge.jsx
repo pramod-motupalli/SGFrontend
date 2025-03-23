@@ -34,22 +34,33 @@ const LightsOutPuzzle = () => {
 
   return (
     <div className="min-h-screen bg-gray-900 flex flex-col items-center justify-center p-4 text-white">
-      <h1 className="text-3xl font-bold mb-6">Lights Out Puzzle</h1>
-      <div className="grid grid-cols-5 gap-1">
-        {board.map((row, rowIndex) =>
-          row.map((cell, colIndex) => (
-            <button
-              key={`${rowIndex}-${colIndex}`}
-              onClick={() => handleCellClick(rowIndex, colIndex)}
-              className={`w-12 h-12 sm:w-16 sm:h-16 border border-gray-600 
-                transition-colors duration-300 ${
-                  cell ? "bg-yellow-400" : "bg-gray-800"
-                }`}
-            />
-          ))
-        )}
+      <h1 className="text-3xl font-bold mb-4 text-center">Lights Out Puzzle</h1>
+
+      {/* Instruction Section with Transparent Background */}
+      <div className="bg-black/50 p-4 rounded-md text-white text-center max-w-3xl mb-6">
+        <p>
+          Click a cell to toggle its light and that of its adjacent neighbors. Your goal is to turn off all the lights.
+          Solve the puzzle by planning your moves carefully!
+        </p>
       </div>
-      {message && <p className="mt-4 text-xl font-semibold">{message}</p>}
+
+      {/* Puzzle Grid */}
+      <div className="grid grid-cols-5 grid-rows-5 gap-0 w-full max-w-md aspect-square border-4 border-gray-700">
+  {board.map((row, rowIndex) =>
+    row.map((cell, colIndex) => (
+      <button
+        key={`${rowIndex}-${colIndex}`}
+        onClick={() => handleCellClick(rowIndex, colIndex)}
+        className={`border border-gray-600 transition-colors duration-300 ${
+          cell ? "bg-yellow-400" : "bg-gray-800"
+        }`}
+      />
+    ))
+  )}
+</div>
+
+
+      {message && <p className="mt-4 text-xl font-semibold text-center">{message}</p>}
     </div>
   );
 };

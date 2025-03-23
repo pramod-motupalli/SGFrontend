@@ -14,9 +14,11 @@ import Thankyou from "./Thankyou.jsx";
 import ContinuousBloodStainEffect from "./ContinuousRedTrailEffect"; // Import the effect
 import PairingButton from "./pair.jsx";
 import EightQueensPuzzle from "./EightQueensPuzzle.jsx"
-import LightsOutPuzzle from "./LightsOutPuzzle.jsx"
+import TowerOfHanoiPuzzle from "./TowerOfHanoiPuzzle.jsx"
 import Sudoku from"./Sudoku.jsx"
 import Game2048 from"./Game2048.jsx"
+
+import LightsOut from"./TypingChallenge.jsx"
 const App = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
@@ -32,8 +34,9 @@ const App = () => {
         />
         <Route path="/HomePage" element={<HomePage />} />
         <Route path="/EightQueensPuzzle" element={<EightQueensPuzzle />} />
-        <Route path="/LightsOutPuzzle" element={<LightsOutPuzzle />} />
+        <Route path="/TowerOfHanoiPuzzle" element={<TowerOfHanoiPuzzle />} />
         <Route path="/Game2048" element={<Game2048 />} />
+        <Route path="/LightsOut" element={<LightsOut />} />
         <Route path="/Sudoku" element={<Sudoku />} />
         <Route path="/pair" element={<PairingButton />} />
         <Route path="/level1-instructions" element={<Level1Instructions />} />

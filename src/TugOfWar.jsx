@@ -148,6 +148,7 @@ const TugOfWar = () => {
       navigate("/Level3instructions");
     } else {
       setGameOver(true);
+      navigate("/Thankyou");
       // Optionally display an alert for insufficient correct answers
     }
   }, [currentQuestion, selectedAnswer, totalQuestions, questions, navigate]);
