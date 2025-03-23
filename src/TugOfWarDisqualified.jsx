@@ -5,28 +5,10 @@ const Disqualified = () => {
   const navigate = useNavigate();
 
   const handleNextClick = async () => {
-    try {
-      // Get the username (this can also be fetched from an API if needed)
-      const username = localStorage.getItem("username");
+   
       
-      // Send a POST request to mark the user as eliminated
-      const response = await fetch("https://squidgamebackend.onrender.com/eliminateUser", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ username, eliminated: true }),
-      });
-
-      if (response.ok) {
-        // If successful, navigate to the thank you page
-        navigate("/thankyou");
-      } else {
-        console.error("Failed to update elimination status.");
-      }
-    } catch (error) {
-      console.error("Error updating elimination status:", error);
-    }
+        navigate("/Thankyou");
+     
   };
 
   return (

@@ -1,6 +1,13 @@
 import React from "react";
 
 const Congratulations = () => {
+    const navigate = useNavigate();
+
+  useEffect(() => {
+    // Clear localStorage upon component mount.
+    localStorage.clear();
+  }, [navigate]);
+
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-purple-600 via-pink-500 to-red-500 relative overflow-hidden">
       <div className="relative z-10 text-center px-4">
