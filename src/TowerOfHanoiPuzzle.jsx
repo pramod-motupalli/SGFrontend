@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
-// Adjust the number of disks here
 const initialDisks = 4;
 const getInitialTowers = (n) => [
-  Array.from({ length: n }, (_, i) => n - i), // Tower 0: disks from largest (n) at bottom to smallest (1) on top
+  Array.from({ length: n }, (_, i) => n - i),
   [],
-  []
+  [],
 ];
 
 const TowerOfHanoiPuzzle = () => {
@@ -19,7 +18,6 @@ const TowerOfHanoiPuzzle = () => {
   const [solutionMoves, setSolutionMoves] = useState([]);
   const [currentMoveIndex, setCurrentMoveIndex] = useState(0);
 
-  // Reset puzzle to initial state
   const resetPuzzle = () => {
     setTowers(getInitialTowers(numDisks));
     setSelectedTower(null);
@@ -29,11 +27,9 @@ const TowerOfHanoiPuzzle = () => {
     setCurrentMoveIndex(0);
   };
 
-  // Handle tower click – only the top disk (last element in the tower array) is movable
   const handleTowerClick = (towerIndex) => {
-    if (isSolving) return; // disable manual moves during auto-solving
+    if (isSolving) return;
 
-    // No tower selected: select this tower if it has at least one disk
     if (selectedTower === null) {
       if (towers[towerIndex].length === 0) {
         setMessage("No disk to move from this tower.");
@@ -42,18 +38,16 @@ const TowerOfHanoiPuzzle = () => {
       setSelectedTower(towerIndex);
       setMessage("");
     } else {
-      // Clicking the same tower cancels the selection
       if (selectedTower === towerIndex) {
         setSelectedTower(null);
         setMessage("Move cancelled.");
         return;
       }
-      // Otherwise, try moving the top disk from the selected tower
+
       const sourceTower = towers[selectedTower];
       const destinationTower = towers[towerIndex];
       const diskToMove = sourceTower[sourceTower.length - 1];
 
-      // Move is valid if destination is empty or its top disk is larger
       if (
         destinationTower.length === 0 ||
         destinationTower[destinationTower.length - 1] > diskToMove
@@ -70,8 +64,7 @@ const TowerOfHanoiPuzzle = () => {
         setSelectedTower(null);
         setMessage("");
 
-        // Check win condition: all disks moved to the third tower
-        if (newTowers[2].length === numDisks) { 
+        if (newTowers[2].length === numDisks) {
           setMessage("Congratulations! Puzzle solved.");
           navigate("/Congratulations");
         }
@@ -82,17 +75,15 @@ const TowerOfHanoiPuzzle = () => {
     }
   };
 
-  // Recursive function to compute moves: each move is [fromTower, toTower]
   const computeSolutionMoves = (n, from, to, aux) => {
     if (n === 0) return [];
     return [
       ...computeSolutionMoves(n - 1, from, aux, to),
       [from, to],
-      ...computeSolutionMoves(n - 1, aux, to, from)
+      ...computeSolutionMoves(n - 1, aux, to, from),
     ];
   };
 
-  // Start auto-solving
   const startAutoSolve = () => {
     if (isSolving) return;
     if (towers[2].length === numDisks) {
@@ -106,7 +97,6 @@ const TowerOfHanoiPuzzle = () => {
     setMessage("Auto-solving...");
   };
 
-  // Animate auto-solver moves step-by-step
   useEffect(() => {
     if (isSolving && solutionMoves.length > 0 && currentMoveIndex < solutionMoves.length) {
       const timer = setTimeout(() => {
@@ -137,7 +127,7 @@ const TowerOfHanoiPuzzle = () => {
           setMessage("Auto-solver encountered an error.");
           setIsSolving(false);
         }
-      }, 500); // delay between moves (ms)
+      }, 500);
       return () => clearTimeout(timer);
     } else if (isSolving && currentMoveIndex >= solutionMoves.length) {
       setIsSolving(false);
@@ -145,10 +135,8 @@ const TowerOfHanoiPuzzle = () => {
     }
   }, [isSolving, solutionMoves, currentMoveIndex, towers, numDisks]);
 
-  // Render a disk with attractive gradient and shadow; width proportional to disk size.
   const renderDisk = (disk) => {
-    const width = disk * 40; // Adjust multiplier for disk visual size
-    // Define gradients based on disk size
+    const width = disk * 40;
     const gradient =
       disk === numDisks
         ? "bg-gradient-to-r from-purple-600 to-blue-600"
@@ -175,7 +163,6 @@ const TowerOfHanoiPuzzle = () => {
         Tower of Hanoi Puzzle
       </h1>
 
-      {/* Instruction Section */}
       <div className="bg-black/50 p-4 rounded-md text-white text-center max-w-xl mb-6">
         <p>
           Move all the disks from the first tower to the third tower.
@@ -186,7 +173,6 @@ const TowerOfHanoiPuzzle = () => {
         </p>
       </div>
 
-      {/* Control Buttons */}
       <div className="flex flex-wrap gap-4 mb-4 justify-center">
         <button
           onClick={resetPuzzle}
@@ -203,7 +189,6 @@ const TowerOfHanoiPuzzle = () => {
         </button> */}
       </div>
 
-      {/* Towers Container */}
       <div className="flex flex-wrap sm:flex-nowrap items-end justify-center gap-4 w-full max-w-3xl">
         {towers.map((tower, towerIndex) => (
           <div
@@ -221,7 +206,6 @@ const TowerOfHanoiPuzzle = () => {
         ))}
       </div>
 
-      {/* Message Display */}
       {message && (
         <div className="mt-4 text-xl text-red-600 text-center">
           {message}
@@ -230,5 +214,3 @@ const TowerOfHanoiPuzzle = () => {
     </div>
   );
 };
-
-export default TowerOfHanoiPuzzle;
