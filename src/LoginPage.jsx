@@ -33,7 +33,7 @@ const LoginPage = () => {
           <Triangle size={50} className="text-white" />
         </div>
         <h1 className="text-cyan-700 font-bold text-2xl sm:text-3xl mb-5">
-          Enter your Player ID
+          Enter your Name
         </h1>
         <form onSubmit={handleStart}>
           <div className="mb-4 text-left">
@@ -42,7 +42,7 @@ const LoginPage = () => {
             </label>
             <input
               type="text"
-              placeholder="Enter your Player ID"
+              placeholder="Name"
               value={playerId}
               onChange={(e) => setPlayerId(e.target.value)}
               required
