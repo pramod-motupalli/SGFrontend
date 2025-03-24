@@ -164,15 +164,15 @@ const HomePage = () => {
                       "Each pair starts with 100 won.",
                       "A buggy code will be given along with an editor to fix it.",
                       "Debugging is only allowed during the green light.",
-                      "If they write during the red light, 5 won is deducted.",
-                      "Pairs with less than 75 won are eliminated.",
+                      "If they write during the red light, 1 won is deducted.",
+                      "Pairs with less than 60 won are eliminated.",
                     ],
                   },
                   {
                     title: "Level 2: Tug of War (Aptitude & Logic Face-off)",
                     rules: [
-                      "The remaining pairs will be split into two teams.",
-                      "Both teams receive the same set of aptitude and logical reasoning questions.",
+                      "
+                      "All players receive the same set of aptitude and logical reasoning questions.",
                       "Correct answers move the virtual rope toward their team’s side.",
                       "The team that pulls the rope completely to their side wins the round.",
                     ],
