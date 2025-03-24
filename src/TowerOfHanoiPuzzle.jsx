@@ -66,7 +66,11 @@ const TowerOfHanoiPuzzle = () => {
 
         if (newTowers[2].length === numDisks) {
           setMessage("Congratulations! Puzzle solved.");
-          navigate("/Congratulations");
+          window.open(
+        "https://squidgame2025.vercel.app/Congratulations",
+        "_self"
+      );
+          // navigate("/Congratulations");
         }
       } else {
         setMessage("Invalid move: you cannot place a larger disk on a smaller one.");
