@@ -38,7 +38,7 @@ const LoginPage = () => {
         <form onSubmit={handleStart}>
           <div className="mb-4 text-left">
             <label className="block mb-1 text-emerald-50 text-3xl">
-              Player ID
+              Player Name
             </label>
             <input
               type="text"
