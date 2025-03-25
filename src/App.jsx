@@ -19,6 +19,7 @@ import Sudoku from"./Sudoku.jsx"
 import Game2048 from"./Game2048.jsx"
 import Congratulations from"./Congratulations.jsx"
 import LightsOut from"./TypingChallenge.jsx"
+import { Analytics } from "@vercel/analytics/react"
 const App = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
