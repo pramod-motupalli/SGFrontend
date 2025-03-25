@@ -220,4 +220,4 @@ const TowerOfHanoiPuzzle = () => {
 
 };
 
-export default EightQueensPuzzle;
+export default TowerOfHanoiPuzzle;
