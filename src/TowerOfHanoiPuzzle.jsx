@@ -217,4 +217,7 @@ const TowerOfHanoiPuzzle = () => {
       )}
     </div>
   );
+
 };
+
+export default EightQueensPuzzle;
