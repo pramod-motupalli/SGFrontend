@@ -24,10 +24,11 @@ const App = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   return (
+    
     <Router>
       {/* Render the BloodStainEffect component so it applies globally */}
       <ContinuousBloodStainEffect />
-
+      <Analytics />
       <Routes>
         <Route
           path="/"
