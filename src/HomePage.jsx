@@ -171,7 +171,7 @@ const HomePage = () => {
                   {
                     title: "Level 2: Tug of War (Aptitude & Logic Face-off)",
                     rules: [
-                      "
+                      "",
                       "All players receive the same set of aptitude and logical reasoning questions.",
                       "Correct answers move the virtual rope toward their team’s side.",
                       "The team that pulls the rope completely to their side wins the round.",
