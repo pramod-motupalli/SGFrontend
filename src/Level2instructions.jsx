@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 
 const Level2Instructions = () => {
   const navigate = useNavigate();
-  const [timeLeft, setTimeLeft] = useState(30); // Timer in seconds
+  const [timeLeft, setTimeLeft] = useState(10); // Timer in seconds
 
   // Format time as MM:SS
   const formatTime = (seconds) => {
