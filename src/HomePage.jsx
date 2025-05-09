@@ -36,7 +36,7 @@ const HomePage = () => {
     const storedTimer = localStorage.getItem("hometimer");
     if (!storedTimer) {
       // Set timer to 200 minutes from now
-      const expirationTime = Date.now() + 1 * 60 * 1000;
+      const expirationTime = Date.now() + 1 * 10 * 1000;
       localStorage.setItem("hometimer", expirationTime);
       setRemainingTime(expirationTime - Date.now());
     } else {
